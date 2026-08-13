@@ -1,0 +1,7 @@
+tp = (5,8,9,"Raghu",8.9)
+print(tp)
+print(type(tp))
+print(tp.count(9))
+print(tp.index("Raghu"))
+tp2 = (5,)
+print(type(tp2))

@@ -1,0 +1,7 @@
+n=int(input())
+tp = tuple(map(int,input().split()))
+e = int(input())
+tp = list(tp)
+tp.append(e)
+tp = tuple(tp)
+print(tp)
