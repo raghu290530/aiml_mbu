@@ -10,5 +10,3 @@ n = int(input())
 n = str(n)
 for e in n:
     print(digit_word(int(e)),end=" ")
-name =  "1r2"
-print(name.is)
