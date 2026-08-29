@@ -1,0 +1,1 @@
+8 9 5 45 56 89 44 14 6265 4545No of Elements: 10Sum : 11080Average : 1108.0No of Elements: 16Sum : 2063Average : 128.9375

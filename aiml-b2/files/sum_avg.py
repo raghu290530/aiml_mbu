@@ -1,0 +1,8 @@
+f = open('input_int.txt','rt')
+li = list(map(int,f.read().split()))
+f.close()
+print(li)
+f = open('input_int.txt','at')
+f.write(f'\nNo of Elements: {len(li)}')
+f.write(f'\nSum : {sum(li)}')
+f.write(f'\nAverage : {sum(li)/len(li)}')

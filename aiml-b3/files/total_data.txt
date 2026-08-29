@@ -1,0 +1,7 @@
+Name       Roll_No    Total     
+--------------------------------------------
+Aarav      AIML-101   398       
+Diya       AIML-102   414       
+Rohan      AIML-103   361       
+Ananya     AIML-104   453       
+Vikram     AIML-105   373       

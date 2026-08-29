@@ -1,0 +1,5 @@
+# f = open('test6.txt','xt')
+f = open('test6.docx','wt')
+# f = open('test6.txt','at')
+f.write("MBU Tirupati - 896646\n")
+f.close()

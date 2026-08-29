@@ -1,0 +1,23 @@
+import re
+txt = "The rain in Spain rain Spain"
+x = re.split(" ",txt,2)
+print(x)
+y = txt.split()
+print(y)
+x = re.split("rain",txt)
+print(x)
+x = re.split('ai',txt)
+print(x)
+x = re.split('ai',txt,1)
+print(x)
+x = re.split('raghu',txt)
+print(x)
+txt = "Hello World"
+x = re.sub('llo','Raghu',txt)
+print(x)
+x = re.sub('l','Raghu',txt)
+print(x)
+x = re.sub('l','Raghu',txt,1)
+print(x)
+x = re.sub('l','Raghu',txt,2)
+print(x)

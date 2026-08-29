@@ -1,0 +1,8 @@
+Name - Raghu
+Roll_No - aiml-101
+Age - 30
+S1 - 45
+S2 - 84
+S3 - 78
+S4 - 52
+S5 - 78

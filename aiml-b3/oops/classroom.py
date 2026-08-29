@@ -1,12 +1,13 @@
-'''Write a class Classroom with students list and a method add_student(name). Add 3 students and print the list.
-'''
+'''Write a class Classroom with students list and a method add_student(name).
+ Add 3 students and print the list.'''
 class Classroom:
-    student_list = []
+    def __init__(self):
+        self.student_list=[]
     def add_student(self,name):
         self.student_list.append(name)
 
-c = Classroom()
-c.add_student("Raghu")
-c.add_student("Ravi")
-c.add_student("Raju")
-print(c.student_list)
+c1 = Classroom()
+c1.add_student("Raghu")
+c1.add_student("Raju")
+c1.add_student("Deepak")
+print(c1.student_list)

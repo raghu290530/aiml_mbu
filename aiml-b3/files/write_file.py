@@ -1,0 +1,5 @@
+f =open("test6.txt",'wt')
+f.write("Raghu is a good boy\n")
+f.write("mbu\n")
+f.write("tirupati\n")
+f.close()
