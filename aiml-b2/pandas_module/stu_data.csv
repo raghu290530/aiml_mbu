@@ -1,0 +1,16 @@
+Student_ID,Name,Age,Gender,Join_Date,Marks,Phone,City
+101,Ananya,20,Female,2025-06-10,85,9876543210,Ballari
+102,Rahul,21,Male,12/06/2025,78,9876543211,Hyderabad
+103,Priya,,Female,2025/06/15,91,9876543212,Ballari
+104,Kiran,twenty,Male,"June 18, 2025",67,9876543213,Bengaluru
+105,Sneha,19,Female,2025-06-20,105,9876543214,
+106,Arjun,200,Male,2025-06-21,72,9876543215,Chennai
+107,Meena,20,Female,not available,88,,Mysuru
+108,Vikram,22,M,2025-06-23,seventy,123,Hyderabad
+109,Divya,21,Female,2025-06-24,82,9876543217,Ballari
+110,Rohit,20,Male,2025-06-25,76,9876543218,Chennai
+109,Divya,21,Female,2025-06-24,82,9876543217,Ballari
+111,Ayesha,19,Female,2025-06-27,89,9876543219,Vijayawada
+112,Manoj,21,Male,2025-06-28,,9876543220,Guntur
+113,Pooja,-5,Female,2025-06-29,64,9876543221,Tirupati
+114,Sandeep,20,Male,2025-06-30,81,9876543222,Hyderabad

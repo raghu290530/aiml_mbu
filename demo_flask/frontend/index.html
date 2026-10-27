@@ -1,0 +1,480 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #243247;
+        }
+
+        header {
+            background: #173b67;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            background: #fff;
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        nav a {
+            margin: 0 12px;
+            color: #1769aa;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        h2 {
+            color: #173b67;
+        }
+
+        button {
+            border: none;
+            border-radius: 5px;
+            background: #1769aa;
+            color: white;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .home {
+            text-align: center;
+            padding: 55px 20px;
+        }
+
+        .home p {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit, minmax(220px, 1fr)
+            );
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .student-card {
+            background: white;
+            border: 1px solid #dbe4ef;
+            border-top: 5px solid #1769aa;
+            border-radius: 9px;
+            padding: 20px;
+        }
+
+        .student-card h3 {
+            margin-top: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .student-card p {
+            color: #475569;
+        }
+
+        .student-card a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #1769aa;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        input, select {
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            font-size: 15px;
+            width: 100%;
+        }
+
+        form button {
+            grid-column: 1 / -1;
+        }
+
+        .details p {
+            padding: 12px;
+            margin: 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .details strong {
+            display: inline-block;
+            min-width: 150px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #1769aa;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #message {
+            font-weight: bold;
+        }
+
+        .empty {
+            color: #64748b;
+            padding: 15px 0;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+
+            form button {
+                grid-column: 1;
+            }
+
+            nav a {
+                display: inline-block;
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Student Management System</h1>
+    <p>Flask + MySQL</p>
+</header>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/students">Students List</a>
+</nav>
+
+<main class="container" id="app"></main>
+
+<script>
+    const app = document.getElementById("app");
+    const path = window.location.pathname;
+
+    // Helper to create elements safely
+    function makeElement(tag, text, className = "") {
+        const element = document.createElement(tag);
+        element.textContent = text;
+
+        if (className) {
+            element.className = className;
+        }
+
+        return element;
+    }
+
+    async function getJSON(url, options = {}) {
+        const response = await fetch(url, options);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Request failed");
+        }
+
+        return data;
+    }
+
+    // ROUTE 1: HOME PAGE (/)
+    function showHome() {
+        const panel = makeElement("section", "", "panel home");
+
+        panel.appendChild(
+            makeElement("h2", "Welcome to Student Management")
+        );
+
+        panel.appendChild(
+            makeElement(
+                "p",
+                "Add students, view student cards, and explore individual records."
+            )
+        );
+
+        const button = makeElement("button", "View Students List");
+
+        button.addEventListener("click", () => {
+            window.location.href = "/students";
+        });
+
+        panel.appendChild(button);
+        app.appendChild(panel);
+    }
+
+    // ROUTE 2: STUDENT LIST (/students)
+    async function showStudents() {
+        const panel = makeElement("section", "", "panel");
+
+        panel.appendChild(makeElement("h2", "Add New Student"));
+
+        const form = document.createElement("form");
+
+        const fields = [
+            ["roll_no", "Roll Number", "number"],
+            ["name", "Student Name", "text"],
+            ["dob", "Date of Birth", "date"],
+            ["gender", "Gender", "select"],
+            ["phone", "Phone Number", "tel"]
+        ];
+
+        fields.forEach(([id, label, type]) => {
+            const wrapper = makeElement("div", "", "field");
+            wrapper.appendChild(makeElement("label", label));
+
+            let input;
+
+            if (type === "select") {
+                input = document.createElement("select");
+
+                const placeholder = makeElement(
+                    "option", "Select Gender"
+                );
+                placeholder.value = "";
+                input.appendChild(placeholder);
+
+                ["M", "F", "O"].forEach(value => {
+                    const option = makeElement("option", value);
+                    option.value = value;
+                    input.appendChild(option);
+                });
+            } else {
+                input = document.createElement("input");
+                input.type = type;
+            }
+
+            input.id = id;
+            input.name = id;
+            input.required = true;
+
+            if (id === "phone") {
+                input.pattern = "[0-9]{10,15}";
+                input.title = "Enter 10 to 15 digits";
+            }
+
+            wrapper.appendChild(input);
+            form.appendChild(wrapper);
+        });
+
+        const submit = makeElement("button", "Add Student");
+        submit.type = "submit";
+        form.appendChild(submit);
+
+        const message = makeElement("p", "", "");
+        message.id = "message";
+
+        form.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const student = {
+                roll_no: Number(form.roll_no.value),
+                name: form.name.value.trim(),
+                dob: form.dob.value,
+                gender: form.gender.value,
+                phone: form.phone.value.trim()
+            };
+
+            try {
+                const result = await getJSON("/api/students", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(student)
+                });
+
+                message.textContent = result.message;
+                message.style.color = "green";
+
+                form.reset();
+                await loadCards();
+
+            } catch (error) {
+                message.textContent = error.message;
+                message.style.color = "red";
+            }
+        });
+
+        panel.appendChild(form);
+        panel.appendChild(message);
+        app.appendChild(panel);
+
+        const listPanel = makeElement("section", "", "panel");
+        listPanel.appendChild(makeElement("h2", "Students List"));
+
+        const cards = makeElement("div", "", "cards");
+        cards.id = "cards";
+
+        listPanel.appendChild(cards);
+        app.appendChild(listPanel);
+
+        await loadCards();
+    }
+
+    // Display only roll number and name in each card
+    async function loadCards() {
+        const cards = document.getElementById("cards");
+        cards.replaceChildren();
+
+        try {
+            const students = await getJSON("/api/students");
+
+            if (students.length === 0) {
+                cards.appendChild(
+                    makeElement("p", "No students found.", "empty")
+                );
+                return;
+            }
+
+            students.forEach(student => {
+                const card = makeElement(
+                    "article", "", "student-card"
+                );
+
+                card.appendChild(
+                    makeElement("h3", student.name)
+                );
+
+                card.appendChild(
+                    makeElement(
+                        "p",
+                        "Roll Number: " + student.roll_no
+                    )
+                );
+
+                const link = makeElement(
+                    "a", "View Full Details →"
+                );
+
+                link.href = "/students/" + student.roll_no;
+
+                card.appendChild(link);
+                cards.appendChild(card);
+            });
+
+        } catch (error) {
+            cards.appendChild(
+                makeElement("p", error.message, "empty")
+            );
+        }
+    }
+
+    // ROUTE 3: INDIVIDUAL DETAILS (/students/1)
+    async function showStudentDetails(id) {
+        const panel = makeElement("section", "", "panel");
+
+        panel.appendChild(makeElement("h2", "Student Full Details"));
+
+        app.appendChild(panel);
+
+        try {
+            const student = await getJSON("/api/students/" + id);
+
+            const details = makeElement("div", "", "details");
+
+            const rows = [
+                ["Roll Number", student.roll_no],
+                ["Name", student.name],
+                ["Date of Birth", student.dob || "-"],
+                ["Gender", student.gender || "-"],
+                ["Phone Number", student.phone || "-"]
+            ];
+
+            rows.forEach(([label, value]) => {
+                const row = document.createElement("p");
+                const strong = makeElement("strong", label + ":");
+                const span = makeElement("span", value ?? "-");
+
+                row.append(strong, span);
+                details.appendChild(row);
+            });
+
+            panel.appendChild(details);
+
+        } catch (error) {
+            panel.appendChild(
+                makeElement("p", error.message)
+            );
+        }
+
+        const back = makeElement("a", "← Back to Students List");
+        back.href = "/students";
+        back.className = "back-link";
+
+        panel.appendChild(back);
+    }
+
+    // Select page according to the current URL
+    if (path === "/") {
+        showHome();
+
+    } else if (path === "/students" || path === "/students/") {
+        showStudents();
+
+    } else {
+        const match = path.match(/^\/students\/(\d+)\/?$/);
+
+        if (match) {
+            showStudentDetails(match[1]);
+        } else {
+            app.appendChild(
+                makeElement("h2", "Page not found")
+            );
+        }
+    }
+</script>
+
+</body>
+</html>
